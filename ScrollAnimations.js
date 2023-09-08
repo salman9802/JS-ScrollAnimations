@@ -46,72 +46,105 @@ class ScrollAnimations {
     }
 
     init() {
-        const styles = document.createElement('style');
-        styles.innerHTML = '';
-
-        switch(this.animation.type) {
+        const styleElem = document.createElement('style');
+        styleElem.innerHTML = '';
+        let style = '';
+        let animationStyle = '';
+        switch (this.animation.type) {
             case 'fade-in':
-                this.element.classList.add('fade-in');
-                styles.innerHTML += `
-                #${this.id}.fade-in {
-                    opacity: 0;
-                    transition: opacity ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
-                }
-                #${this.id}.fade-in.animate {
-                    opacity: 1;
-                }
-                `;
+                style += `opacity: 0; transition: opacity ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `opacity: 1;`;
                 break;
             case 'slide-left':
-                this.element.classList.add('slide-left');
-                styles.innerHTML += `
-                #${this.id}.slide-left {
-                    transform: translateX(-100%);
-                    transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
-                }
-                #${this.id}.slide-left.animate {
-                    transform: translateX(0);
-                }
-                `;
+                style += `transform: translateX(-100%); transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `transform: translateX(0);`;
                 break;
             case 'slide-right':
-                this.element.classList.add('slide-right');
-                styles.innerHTML += `
-                #${this.id}.slide-right {
-                    transform: translateX(100%);
-                    transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
-                }
-                #${this.id}.slide-right.animate {
-                    transform: translateX(0);
-                }
-                `;
-                break;
-            case 'slide-bottom':
-                this.element.classList.add('slide-bottom');
-                styles.innerHTML += `
-                #${this.id}.slide-bottom {
-                    transform: translateY(100%);
-                    transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
-                }
-                #${this.id}.slide-bottom.animate {
-                    transform: translateY(0);
-                }
-                `;
+                style += ` transform: translateX(100%); transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `transform: translateX(0);`;
                 break;
             case 'slide-top':
-                this.element.classList.add('slide-top');
-                styles.innerHTML += `
-                #${this.id}.slide-top {
-                    transform: translateY(-100%);
-                    transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
-                }
-                #${this.id}.slide-top.animate {
-                    transform: translateY(0);
-                }
-                `;
+                style += `transform: translateY(-100%); transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `transform: translateY(0);`;
                 break;
+            case 'slide-bottom': 
+                style += `transform: translateY(100%); transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `transform: translateY(0);`;
+                break;
+            default:
+                throw new Error('Not a valid animation type');
         }
-        this.element.appendChild(styles);
+
+        this.element.classList.add('fade-in');
+            styleElem.innerHTML += `
+            #${this.id}.fade-in { ${style} }
+            #${this.id}.fade-in.animate { ${animationStyle} }
+        `;
+
+
+        // switch(this.animation.type) {
+        //     case 'fade-in':
+                // this.element.classList.add('fade-in');
+                // styleElem.innerHTML += `
+                // #${this.id}.fade-in {
+                //     opacity: 0;
+                //     transition: opacity ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
+                // }
+                // #${this.id}.fade-in.animate {
+                //     opacity: 1;
+                // }
+                // `;
+        //         break;
+        //     case 'slide-left':
+        //         this.element.classList.add('slide-left');
+        //         styleElem.innerHTML += `
+        //         #${this.id}.slide-left {
+        //             transform: translateX(-100%);
+        //             transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
+        //         }
+        //         #${this.id}.slide-left.animate {
+        //             transform: translateX(0);
+        //         }
+        //         `;
+        //         break;
+        //     case 'slide-right':
+        //         this.element.classList.add('slide-right');
+        //         styleElem.innerHTML += `
+        //         #${this.id}.slide-right {
+        //             transform: translateX(100%);
+        //             transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
+        //         }
+        //         #${this.id}.slide-right.animate {
+        //             transform: translateX(0);
+        //         }
+        //         `;
+        //         break;
+        //     case 'slide-bottom':
+        //         this.element.classList.add('slide-bottom');
+        //         styleElem.innerHTML += `
+        //         #${this.id}.slide-bottom {
+        //             transform: translateY(100%);
+        //             transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
+        //         }
+        //         #${this.id}.slide-bottom.animate {
+        //             transform: translateY(0);
+        //         }
+        //         `;
+        //         break;
+        //     case 'slide-top':
+        //         this.element.classList.add('slide-top');
+        //         styleElem.innerHTML += `
+        //         #${this.id}.slide-top {
+        //             transform: translateY(-100%);
+        //             transition: transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};
+        //         }
+        //         #${this.id}.slide-top.animate {
+        //             transform: translateY(0);
+        //         }
+        //         `;
+        //         break;
+        // }
+        this.element.appendChild(styleElem);
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -131,53 +164,13 @@ class ScrollAnimations {
         observer.observe(this.element);
         this.observer = observer;
     }
-
-    initStyles() {
-        // switch(this.animation.type) {
-        //     case 'fade-in':
-        //     case 'slide-left':
-        //     case 'slide-right':
-        //     case 'slide-top':
-        //     case 'slide-bottom':
-        //         this.element.classList.add(this.animation.type);
-        //         break;
-        //     default: 
-        //         throw new Error('Invalid animation type');
-        // }
-        // const styles = document.createElement('style');
-        // styles.innerHTML = '';
-
-        // switch(this.animation.type) {
-        //     case 'fade-in':
-        //         styles += `
-        //         ${this.id}.fade-in {
-        //             opacity: 0;
-        //             /* transition: opacity 1s ease-in; */
-        //             transition: all 1s ease-in;
-        //         }
-        //         ${this.id}.fade-in.animate {
-        //             opacity: 1;
-        //         }
-        //         `;
-        //         break;
-        //     // case 'slide-left':
-        //     //     break;
-        //     // case 'slide-right':
-        //     //     break;
-        //     // case 'slide-top':
-        //     //     break;
-        //     // case 'slide-bottom':
-        //     //     break;
-        // }
-        // this.element.appendChild(styles);
-    }
 }
 
 new ScrollAnimations({
     id: 'test-animation',
     animation: {
         // property: 'opacity', // mandatory
-        type: 'slide-top', // mandatory
+        type: 'fade-in', // mandatory
         duration: '1000ms', // default 1000ms
         timingFunc: 'ease-in', // default 'ease-in'
         // delay: '1000ms', // default 0
