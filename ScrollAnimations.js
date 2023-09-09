@@ -41,6 +41,10 @@ class ScrollAnimations {
         this.onlyOnce = onlyOnce;
         this.viewport = viewport;
         this.animated = false;
+        if(this.animation.type === 'blur'){
+            this.animation.blurValue = animation.blurValue;
+            this.onlyOnce = true;
+        }
 
         this.init();
 
@@ -71,6 +75,10 @@ class ScrollAnimations {
             case 'slide-bottom': 
                 style += `transform: translateY(100%); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateY(0);`;
+                break;
+            case 'blur': 
+                style += `filter: blur(${ this.animation?.blurValue ? this.animation.blurValue : '5px' }); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} filter ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                animationStyle += `filter: blur(0);`;
                 break;
             default:
                 throw new Error('Not a valid animation type');
@@ -106,7 +114,6 @@ class ScrollAnimations {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting){
-                    // console.log(getComputedStyle(entry.target).getPropertyValue('transition'));
                     entry.target.classList.add('animate');
                     if(this.onlyOnce) this.animated = true;
                 }
@@ -120,27 +127,28 @@ class ScrollAnimations {
     }
 }
 
-new ScrollAnimations({
-    id: 'test-animation',
-    animation: {
-        // property: 'opacity', // mandatory
-        type: 'fade-in', // mandatory
-        duration: '1000ms', // default 1000ms
-        // timingFunc: 'ease-in', // default 'ease-in'
-        // delay: '1000ms', // default 0
-    },
-    // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
-    onlyOnce: true // default false/undefined
-});
+// new ScrollAnimations({
+//     id: 'test-animation',
+//     animation: {
+//         // property: 'opacity', // mandatory
+//         type: 'fade-in', // mandatory
+//         duration: '1000ms', // default 1000ms
+//         // timingFunc: 'ease-in', // default 'ease-in'
+//         // delay: '1000ms', // default 0
+//     },
+//     // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
+//     onlyOnce: true // default false/undefined
+// });
 
 new ScrollAnimations({
     id: 'test-animation',
     animation: {
-        type: 'slide-left',
-        duration: '500ms',
+        type: 'blur',
+        blurValue: '100px', // animation might finish early if this value is to large
+        duration: '1500ms',
         // timingFunc: 'ease-in'
     },
-    onlyOnce: true
+    // onlyOnce: true,
     // viewport: {top: '-50%', bottom: '-50%'},
 });
 
