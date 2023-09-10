@@ -44,6 +44,14 @@ class ScrollAnimations {
         if(this.animation.type === 'blur'){
             this.animation.blurValue = animation.blurValue;
             this.onlyOnce = true;
+        } else if(this.animation.type.match(/^slide-/)) {
+            if(animation.slideValue){
+            const matches = animation.slideValue.match(/^-?(\d+)(vw|vh|%)$/);
+            if(parseInt(matches[1]) > 50 && matches[2] !== '%') {
+                console.warn(`'slideValue' should be less than or equal to 50 for vh and vw units. This is because element goes out of the window prevents animations to be triggered`);
+                return;
+            }
+        } else this.animation.slideValue = animation.slideValue;
         }
 
         this.init();
@@ -61,19 +69,19 @@ class ScrollAnimations {
                 animationStyle += `opacity: 1;`;
                 break;
             case 'slide-left':
-                style += `transform: translateX(-100%); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                style += `transform: translateX(${ this.animation?.slideValue ? this.animation.slideValue : '-100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateX(0);`;
                 break;
             case 'slide-right':
-                style += ` transform: translateX(100%); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                style += ` transform: translateX(${ this.animation?.slideValue ? this.animation.slideValue : '100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateX(0);`;
                 break;
             case 'slide-top':
-                style += `transform: translateY(-100%); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                style += `transform: translateY(${ this.animation?.slideValue ? this.animation.slideValue : '-100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateY(0);`;
                 break;
             case 'slide-bottom': 
-                style += `transform: translateY(100%); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+                style += `transform: translateY(${ this.animation?.slideValue ? this.animation.slideValue : '100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateY(0);`;
                 break;
             case 'blur': 
@@ -89,7 +97,7 @@ class ScrollAnimations {
             #${this.id}.${this.animation.type} { ${style} }
             #${this.id}.${this.animation.type}.animate { ${animationStyle} }
         `;
-        console.log(getComputedStyle(this.element).getPropertyValue('transition'));
+        // console.log(getComputedStyle(this.element).getPropertyValue('transition'));
 
         
         this.element.appendChild(styleElem);
@@ -127,28 +135,29 @@ class ScrollAnimations {
     }
 }
 
-// new ScrollAnimations({
-//     id: 'test-animation',
-//     animation: {
-//         // property: 'opacity', // mandatory
-//         type: 'fade-in', // mandatory
-//         duration: '1000ms', // default 1000ms
-//         // timingFunc: 'ease-in', // default 'ease-in'
-//         // delay: '1000ms', // default 0
-//     },
-//     // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
-//     onlyOnce: true // default false/undefined
-// });
+new ScrollAnimations({
+    id: 'test-animation',
+    animation: {
+        // property: 'opacity', // mandatory
+        type: 'fade-in', // mandatory
+        duration: '800ms', // default 1000ms
+        // timingFunc: 'ease-in', // default 'ease-in'
+        delay: '500ms', // default 0
+    },
+    // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
+    onlyOnce: true // default false/undefined
+});
 
 new ScrollAnimations({
     id: 'test-animation',
     animation: {
-        type: 'blur',
-        blurValue: '100px', // animation might finish early if this value is to large
-        duration: '1500ms',
+        type: 'slide-right',
+        // blurValue: '100px', // animation might finish early if this value is to large
+        slideValue: '50vw', // must be less than or equal to 50 for vh & vw units to avoid unexpected behavior
+        duration: '1000ms',
         // timingFunc: 'ease-in'
     },
-    // onlyOnce: true,
+    onlyOnce: true,
     // viewport: {top: '-50%', bottom: '-50%'},
 });
 
