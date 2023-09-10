@@ -135,18 +135,18 @@ class ScrollAnimations {
     }
 }
 
-new ScrollAnimations({
-    id: 'test-animation',
-    animation: {
-        // property: 'opacity', // mandatory
-        type: 'fade-in', // mandatory
-        duration: '800ms', // default 1000ms
-        // timingFunc: 'ease-in', // default 'ease-in'
-        delay: '500ms', // default 0
-    },
-    // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
-    // onlyOnce: true // default false/undefined
-});
+// new ScrollAnimations({
+//     id: 'test-animation',
+//     animation: {
+//         // property: 'opacity', // mandatory
+//         type: 'fade-in', // mandatory
+//         duration: '800ms', // default 1000ms
+//         // timingFunc: 'ease-in', // default 'ease-in'
+//         delay: '500ms', // default 0
+//     },
+//     // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
+//     // onlyOnce: true // default false/undefined
+// });
 
 // new ScrollAnimations({
 //     id: 'test-animation',
@@ -161,16 +161,16 @@ new ScrollAnimations({
 //     // viewport: {top: '-50%', bottom: '-50%'},
 // });
 
-new ScrollAnimations({
-    id: 'test-animation',
-    animation: {
-        type: 'slide-x',
-        slideValue: '-100%',
-        // type: 'slide-y',
-        // slideValue: '-100%',
-        duration: '1000ms',
-        timingFunc: 'ease-in'
-    }
-});
+// new ScrollAnimations({
+//     id: 'test-animation',
+//     animation: {
+//         type: 'slide-x',
+//         slideValue: '-100%',
+//         // type: 'slide-y',
+//         // slideValue: '-100%',
+//         duration: '1000ms',
+//         timingFunc: 'ease-in'
+//     }
+// });
 
 export { ScrollAnimations };
