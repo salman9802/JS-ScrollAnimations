@@ -68,19 +68,19 @@ class ScrollAnimations {
                 style += `opacity: 0; transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} opacity ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `opacity: 1;`;
                 break;
-            case 'slide-left':
+            case 'slide-x':
                 style += `transform: translateX(${ this.animation?.slideValue ? this.animation.slideValue : '-100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateX(0);`;
                 break;
-            case 'slide-right':
-                style += ` transform: translateX(${ this.animation?.slideValue ? this.animation.slideValue : '100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
-                animationStyle += `transform: translateX(0);`;
-                break;
-            case 'slide-top':
-                style += `transform: translateY(${ this.animation?.slideValue ? this.animation.slideValue : '-100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
-                animationStyle += `transform: translateY(0);`;
-                break;
-            case 'slide-bottom': 
+            // case 'slide-right':
+            //     style += ` transform: translateX(${ this.animation?.slideValue ? this.animation.slideValue : '100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+            //     animationStyle += `transform: translateX(0);`;
+            //     break;
+            // case 'slide-top':
+            //     style += `transform: translateY(${ this.animation?.slideValue ? this.animation.slideValue : '-100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
+            //     animationStyle += `transform: translateY(0);`;
+            //     break;
+            case 'slide-y': 
                 style += `transform: translateY(${ this.animation?.slideValue ? this.animation.slideValue : '100%'}); transition: ${getComputedStyle(this.element).getPropertyValue('transition') != 'all 0s ease 0s' ? getComputedStyle(this.element).getPropertyValue('transition') + ',': ''} transform ${this.animation.duration} ${this.animation.timingFunc} ${this.animation.delay};`;
                 animationStyle += `transform: translateY(0);`;
                 break;
@@ -145,20 +145,32 @@ new ScrollAnimations({
         delay: '500ms', // default 0
     },
     // viewport: {top: '-50%', bottom: '-50%'}, // default top: -30% bottom: -30%
-    onlyOnce: true // default false/undefined
+    // onlyOnce: true // default false/undefined
 });
+
+// new ScrollAnimations({
+//     id: 'test-animation',
+//     animation: {
+//         type: 'slide-y',
+//         // blurValue: '100px', // animation might finish early if this value is to large
+//         slideValue: '-20vh', // must be less than or equal to 50 for vh & vw units to avoid unexpected behavior
+//         duration: '1000ms',
+//         // timingFunc: 'ease-in'
+//     },
+//     // onlyOnce: true,
+//     // viewport: {top: '-50%', bottom: '-50%'},
+// });
 
 new ScrollAnimations({
     id: 'test-animation',
     animation: {
-        type: 'slide-right',
-        // blurValue: '100px', // animation might finish early if this value is to large
-        slideValue: '50vw', // must be less than or equal to 50 for vh & vw units to avoid unexpected behavior
+        type: 'slide-x',
+        slideValue: '-100%',
+        // type: 'slide-y',
+        // slideValue: '-100%',
         duration: '1000ms',
-        // timingFunc: 'ease-in'
-    },
-    onlyOnce: true,
-    // viewport: {top: '-50%', bottom: '-50%'},
+        timingFunc: 'ease-in'
+    }
 });
 
 export { ScrollAnimations };
